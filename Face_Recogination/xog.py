@@ -69,6 +69,8 @@ class Data:
             return e
 
     def insert_data(self, ID, name, student_class, telphone, image):
+        index = image.find("/media")
+        image = ".."+image[index:]
         """Insert a new row into the Student table."""
         sql = "INSERT INTO Student (ID, Name, Class, Telphone, Image) VALUES (?, ?, ?, ?, ?)"
         try:
@@ -186,6 +188,7 @@ class Data:
             cur = self.conn.cursor()
             cur.execute(sql, tuple(params))
             rows = cur.fetchall()
+            print("rows : ",rows,"Image,ID : ",Image,ID)
             List = []
             for i in rows:
                 for n in i:

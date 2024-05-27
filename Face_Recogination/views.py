@@ -73,13 +73,23 @@ def rename(request):
         except:
             pass
         images=request.FILES.getlist("Images")
+        try:
+            id = request.POST["ID"]
+            Name = request.POST["Name"]
+            Class = request.POST["Class"]
+            Email = request.POST["Email"]
+        except:
+            id=""
         img=Images()
         for i in images:
             img.images=i
             img.save()
         num_of_files=obj.rename_files()
         num_of_files="number of Images of renamed are : "+str(num_of_files)
-        info_of_image=obj.generate()
+        if id != "":
+            info_of_image=obj.generate([id,Name,Class,Email])
+        else:
+            info_of_image=obj.generate([])
     return render(request,"train.html",{"num_of_image":{"header":"renamed images","content":info_of_image[0]},"info_of_image":{"dup_header":"duplicated images and same person",
             "dup_content":info_of_image[1],"remove_header":"removed Image","rem_content":info_of_image[2]}})
 

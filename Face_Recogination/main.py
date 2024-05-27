@@ -18,6 +18,13 @@ class Main:
         self.folder_path=folder_path
         self.data=data
         self.test=test
+        if not  os.path.exists(self.folder_path):
+            try:
+                os.makedirs(self.ddir)
+                os.makedirs(self.data)
+                os.makedirs(self.test)
+            except:
+                pass
 
 
 
@@ -64,13 +71,7 @@ class Main:
 
     def rename_files(self,folder_path=pathka + "/media/dataset/check/"):
         self.folder_path=folder_path
-        if  os.path.exists(self.folder_path):
-            try:
-                os.makedirs(self.ddir)
-                os.makedirs(self.data)
-                os.makedirs(self.test)
-            except:
-                pass
+      
         self.image_files = []
         for file_name in os.listdir(self.folder_path):
             if os.path.isfile(os.path.join(self.folder_path, file_name)):
@@ -81,7 +82,8 @@ class Main:
 
 
 
-    def generate(self,):
+    def generate(self,student_info):
+        print("data waa : ",student_info)
         first_male = ["Liban", "khadar", "Abas", "suleyman", "Omar", "Abdullahi"]
         first_female = ["khadro", "sacdiyo", "xalimo", "caasho", "safiyo", "ruweydo"]
         second_names = ["Yaxye", "mohamed", "Axmed", "Maxmuud", "Abdiqaadir", "Da'ud"]
@@ -135,15 +137,18 @@ class Main:
                             count_test+=1
                         else:
                             kii+=1
-                            IDga = "C11800" + str(kii)
+                            if len(student_info) != 0:
+                                IDga ,full_name,fasal,phone = student_info[0] ,student_info[1],student_info[2],student_info[3] 
+                            else:  
+                                IDga = "C11800" + str(kii)
+                                phone = 617653631
                             ID.append(IDga)
                             encode.append(face_encoding[0])
                             new_file = self.ddir+IDga+".jpg"
                             sawir = new_file.replace('/home/liban/Downloads/Group76', '')
-                            print("sawir waa : ",sawir)
                             os.rename(croped,self.test+IDga+".jpg")
                             os.rename(self.folder_path+file_name,new_file)
-                            db.insert_data(IDga,full_name,fasal[last],617653631,sawir)
+                            db.insert_data(IDga,full_name,fasal,phone,sawir)
                             saved+=1
                     else:
                         count_remove+=1
@@ -190,9 +195,12 @@ class Main:
         matches = face_distances < distance_threshold
         if np.any(matches):
             matched_names = np.array(self.known_face_names)[matches].tolist()
+            print("matched_names : ",matched_names)
             all = []
             for i in matched_names:
+                print(i)
                 x = db.search_data(i)
+                print(x)
                 all.append(x)
             return all
         elif distance_threshold<0.45:
