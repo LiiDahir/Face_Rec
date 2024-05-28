@@ -32,6 +32,27 @@ def check(request):
         except:
             userka = "This User user is not exsits"
     return render(request,"login.html",{"user":userka})
+def edit(request,id):
+    if request.method == "POST":
+        user = request.POST ["user"]
+        Pass = request.POST ["pass"]
+        gmai = request.POST ["gmail"]
+        user_type = request.POST ["type"]
+        if gmai[-10:] == "@gmail.com":
+            db.delete_user(id)
+            x = db.insert_user(user,gmai,user_type,Pass)
+            if x == None:
+                return render(request,"signup.html",{"fill":[""], "users":db.get_users()})
+            else:
+                return render(request,"signup.html",{"erorr":x ,"users":db.get_users()})
+
+        else:
+            return render(request,"signup.html",{"eror":"invalid gmail","users":db.get_users()})
+    else:redirect()
+
+    userka = db.get_user(id)
+    uses = db.get_users()
+    return render(request,"signup.html",{"fill":userka,"user":uses})
 def save(request):
     if request.method == "POST":
         user = request.POST ["user"]
@@ -40,21 +61,22 @@ def save(request):
         user_type = request.POST ["type"]
         if gmai[-10:] == "@gmail.com":
             x = db.insert_user(user,gmai,user_type,Pass)
-            print(x)
             if x == None:
-                return render(request,"login.html",{"user": "user is created successfully"})
+                return render(request,"signup.html",{"fill":[""], "users":db.get_users()})
             else:
-                return render(request,"login.html",{"user": x})
+                return render(request,"signup.html",{"erorr":x ,"users":db.get_users()})
 
         else:
-            return render(request,"login.html",{"user":"invalid gmail"})
+            return render(request,"signup.html",{"eror":"invalid gmail","users":db.get_users()})
 
 def index(request):
-    return render(request,"index.html",{"users":db.get_users(),"students":db.get_students()})
+    return render(request,"index.html",{"students":db.get_students()})
 def train(request):
     return render(request,"train.html",{"num_of_image":{"header":"","content":""},"info_of_image":{"dup_header":"","dup_content":"","remove_header":" ","rem_content":""}})
 def test(request):
     return render(request,"test.html",{})
+def signup(request):
+    return render(request,"signup.html",{"fill":[""],"user":db.get_users()})
 
 
 def logout(request):

@@ -63,11 +63,21 @@ class Data:
         try:
             c = self.conn.cursor()
             c.execute(create_table_sql)
-            c.execute("insert into Users (User,Gmail,user_type,Pass) (administrator,administrator@gmail.com,admin,1234)")
+            c.execute("insert into Users(User,Gmail,user_type,Pass) values('administrator','administrator@gmail.com','admin',1234)")
             print("Table Users created or already exists.")
         except Error as e:
+            print(e)
             return e
-
+    def delete_user(self, user):
+        cur = self.conn.cursor()
+        try:
+            cur.execute("DELETE FROM Users WHERE User = ?", (user,))
+            self.conn.commit()
+            print(f"User {user} deleted successfully.")
+        except sqlite3.Error as e:
+            print(f"An error occurred: {e}")
+        finally:
+            cur.close()
     def insert_data(self, ID, name, student_class, telphone, image):
         index = image.find("/media")
         image = ".."+image[index:]

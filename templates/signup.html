@@ -1,0 +1,121 @@
+{% include 'navbar.html' %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="text-center mt-4">Welcome to the Training Page</h3>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {% if fill.0 == "" %}
+                        <form action="{% url 'save' %}" id="upload-form" method="post" enctype="multipart/form-data">
+                    {% else %}
+                        <form action="{% url 'edit' fill.0 %}" id="upload-form" method="post" enctype="multipart/form-data">
+                    {% endif %}
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="ID">Username</label>
+                                    {% if fill.0 == "" %}
+                                        <input type="text" value="{{fill.0}}" class="form-control" required id="user" name="user">
+                                    {% else %}
+                                        <input type="text" readonly value="{{fill.0}}" class="form-control" required id="user" name="user">
+                                    {% endif %}
+                                </div>
+                                <div class="col-6">
+                                    <label for="Name">User Type</label>
+                                    <input type="text" class="form-control" readonly required id="Name" name="type" value="investegator">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="Class">Email</label>
+                                    <input type="email" value="{{fill.1}}" class="form-control" required id="Class" name="gmail" >
+                                </div>
+                                 <div class="col-6">
+                                    <label for="pass">Password</label>
+                                    <input type="text" value="{{fill.3}}" class="form-control" required id="Email" name="pass">
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="row">
+                                {% if fill.0 == "" %}
+                                    <div class="col-6">
+                                        <br>
+                                        <button type="submit" class="btn btn-primary col-12">Save</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <br>
+                                        <button type="reset" class="btn btn-danger col-12" >clear</button>
+                                    </div>
+                                {% else %}
+                                    <div class="col-6">
+                                        <br>
+                                        <button type="submit" class="btn btn-primary col-12">Update</button>
+                                    </div>
+                                    <div class="col-6">
+                                        <br>
+                                        <button type="reset" class="btn btn-danger col-12" >clear</button>
+                                    </div>
+                                {% endif %}
+                            
+                            </div>
+                                                    
+
+                        </div>
+
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Users</h6>
+                        <a href="#">Show All</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                                <tr class="text-dark">
+                                    <th scope="col">User</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Gmail</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in user %}
+                                <!-- {{row}} -->
+                                
+                                {{row.4}}
+                                <tr>
+                                    <td>{{ row.0 }}</td>
+                                    <td>{{ row.1 }}</td>
+                                    <td>{{ row.2 }}</td>
+                                    <td>
+                                        <a href="{% url 'edit' row.0 %}" class="fas fa-edit"></a>
+                                    </td>
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}

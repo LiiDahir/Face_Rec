@@ -22,6 +22,7 @@
                     {% if request.session.type == "admin" %}
                         <a href="{% url 'train' %}" class="dropdown-item">Train Model</a>
                         <a href="{% url 'test' %}" class="dropdown-item">Test Model</a>
+                        <a href="{% url 'signup' %}" class="dropdown-item">Users</a>
                     {% else %}
                         <a href="{% url 'test' %}" class="dropdown-item">Test Model</a>
                     {% endif %}
